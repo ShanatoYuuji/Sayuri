@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sayuri.mapper.BlogMapper">
+	<resultMap type="com.sayuri.entity.Category" id="result_Catagory">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+	</resultMap>
+
+  <select id="selectBlog" statementType="PREPARED" resultMap="result_Catagory">
+    select * from category where id = #{id}
+  </select>
+  
+	<resultMap id="blogResult" type="com.sayuri.entity.Blog" >
+		<association property="product" column="name" javaType="com.sayuri.entity.Product" select="selectAuthor"></association>
+	</resultMap>
+	
+	<select id="selectBlog2" resultMap="blogResult">
+		 SELECT * FROM category WHERE id = #{id}
+	</select>
+  
+  	<select id="selectAuthor" resultType="com.sayuri.entity.Product">
+  		 SELECT * FROM product_ WHERE id = #{id}
+  	</select>
+  	
+  	<resultMap type="com.sayuri.entity.Blog" id="blogResult1">
+  		<result property="id" column="id"/>
+  		<result property="name" column="name"/>
+  		<collection property="productlst" javaType="ArrayList" column="name" ofType="com.sayuri.entity.Product" select="selectPostsForBlog"></collection>
+  	</resultMap>
+  	
+  	<select id="selectBlog3" resultMap="blogResult1">
+  		 SELECT * FROM category WHERE id = #{id}
+  	</select>
+  	
+  	<select id="selectPostsForBlog" resultType="com.sayuri.entity.Product">
+  		 SELECT * FROM product_ WHERE ver = #{name}
+  	</select>
+  	
+</mapper>
